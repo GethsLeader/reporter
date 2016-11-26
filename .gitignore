@@ -1,0 +1,6 @@
+!.gitignore
+/.idea
+/dist
+/node_modules
+*.*~
+*.tmp
