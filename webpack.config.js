@@ -11,7 +11,7 @@ const srcpath = path.resolve(__dirname, './src');
 // basic configuration
 const config = {
     entry: {
-        'test-application': ['babel-polyfill', path.join(srcpath, 'applications/test/application')]
+        'reporter-application': ['babel-polyfill', path.join(srcpath, 'applications/reporter/application')]
     },
     output: {
         path: distpath,
@@ -39,8 +39,8 @@ const config = {
             [
                 //{context: path.join(srcpath, 'applications'), from: '**/*.html', to: distpath},
                 {
-                    from: path.join(srcpath, 'applications', 'test', 'index.html'),
-                    to: path.join(distpath, 'test.html')
+                    from: path.join(srcpath, 'applications', 'reporter', 'index.html'),
+                    to: path.join(distpath, 'index.html')
                 }
             ],
             {
@@ -56,18 +56,11 @@ if (process.env.WEBPACK_ENV === 'production') {
                 warnings: false
             },
             comments: false
-        }),
-        new webpack.DefinePlugin({
-            'WEBPACK_ENV': 'production'
         })
     ]);
 } else {
     config.devtool = 'source-map';
-    config.plugins = config.plugins.concat([
-        new webpack.DefinePlugin({
-            'WEBPACK_ENV': 'development'
-        })
-    ]);
+    config.plugins = config.plugins.concat([]);
 }
 
 module.exports = config;
