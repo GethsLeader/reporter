@@ -13,9 +13,8 @@ import * as XLSX from 'ts-xlsx';
     <h1>Reporter</h1>
     <p>{{environment.tick}}</p>`
 })
-
 export class Reporter {
-    environment;
+    environment: Environment;
 
     constructor(environment: Environment) {
         this.environment = environment;

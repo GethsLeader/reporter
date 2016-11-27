@@ -8,9 +8,8 @@ import {Environment} from '../../components/environment';
     <h1>Test</h1>
     <p>{{environment.tick}}</p>`
 })
-
 export class Test {
-    environment;
+    environment: Environment;
 
     constructor(environment: Environment) {
         this.environment = environment;

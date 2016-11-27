@@ -7,6 +7,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 // default paths
 const distpath = path.resolve(__dirname, './dist');
 const srcpath = path.resolve(__dirname, './src');
+const libspath = path.resolve(__dirname, './node_modules');
 
 // basic configuration
 const config = {
@@ -41,6 +42,10 @@ const config = {
                 {
                     from: path.join(srcpath, 'applications', 'reporter', 'index.html'),
                     to: path.join(distpath, 'index.html')
+                },
+                {
+                    from: path.join(libspath, 'bootstrap', 'dist', 'css', 'bootstrap.min.css'),
+                    to: path.join(distpath, 'libs', 'bootstrap.min.css')
                 }
             ],
             {
