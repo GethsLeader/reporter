@@ -1,11 +1,8 @@
-import {Component, Inject, Injectable, Input} from '@angular/core';
+import {Component, Injectable, Input} from '@angular/core';
 
 import {Environment} from '../../components/environment';
 
 export class Alert {
-
-    @Inject(Environment) environment: Environment;
-
     type: String;
     message: String;
     created: Number;
