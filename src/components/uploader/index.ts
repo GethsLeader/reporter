@@ -54,7 +54,10 @@ export class Uploader {
         this.setAllowedFileTypes(this.fileProvider.allowedFileTypes);
         this.setAllowedFileExtensions(this.fileProvider.allowedFileExtensions);
         setTimeout(() => {
-            this.alertsProvider.addAlert('uploader', new Alert('danger', 'this is message!'));
+            this.alertsProvider.addAlert('uploader', new Alert('danger', 'this is message 1!'));
+            this.alertsProvider.addAlert('uploader', new Alert('info', 'this is message 2!'));
+            this.alertsProvider.addAlert('uploader', new Alert('success', 'this is message 3!'));
+            this.alertsProvider.addAlert('uploader', new Alert('warning', 'this is message 4!'));
         }, 2000);
     }
 

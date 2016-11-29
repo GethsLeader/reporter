@@ -1,0 +1,4 @@
+<div *ngFor="let alert of group.alerts; let i = index;" class="alert alert-{{alert.type}}">
+    <a class="close" aria-label="close" (click)="alert.remove()">&times;</a>
+    <strong>{{alert.getTitle()}}</strong> {{alert.message}}
+</div>

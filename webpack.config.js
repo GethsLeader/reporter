@@ -46,6 +46,11 @@ const config = {
                 {
                     from: path.join(libspath, 'bootstrap', 'dist', 'css', 'bootstrap.min.css'),
                     to: path.join(distpath, 'libs', 'bootstrap.min.css')
+                },
+                {
+                    context: path.join(srcpath, 'components'),
+                    from: path.join('**/*.html'),
+                    to: path.join(distpath, 'comps')
                 }
             ],
             {

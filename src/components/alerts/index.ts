@@ -21,6 +21,17 @@ export class Alert {
         this.group = group;
         this.group.add(this);
     }
+
+    remove() {
+        let index = this.group.alerts.indexOf(this);
+        if (index >= 0) {
+            this.group.alerts.splice(index, 1);
+        }
+    }
+
+    getTitle(): String {
+        return this.type[0].toUpperCase() + this.type.slice(1) + '!';
+    }
 }
 
 class AlertsGroup {
@@ -79,11 +90,7 @@ export class AlertsProvider {
 
 @Component({
     selector: 'alerts',
-    template: `
-    <div>Alerts {{id}} here!</div>
-    <ul>
-        <li *ngFor="let alert of group.alerts">Alert {{alert.message}}</li>
-    </ul>`
+    templateUrl: './comps/alerts/template.html'
 })
 export class Alerts {
     environment: Environment;
