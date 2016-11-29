@@ -41,8 +41,21 @@ npm install
 * **ts-xlsx** - library for worksheets stuff working,
 * **zone.js** - scopes zoning, i think
 
-Also do not forget about __TypeScript__ compilator and bundler. I'm using [Webpack 2](https://webpack.github.io/) as bundler for this project.
+Also do not forget about __TypeScript__ compiler and bundler. I'm using [Webpack 2](https://webpack.github.io/) as bundler for this project.
 Webpack configuration file can be found in in project root - __webpack.config.js__.
+And... here also [Babel](https://babeljs.io/) in use.
+Webpack bundler and TypeScript compiler installed globally and linked to project folder:
+
+```
+npm install -g typescript
+npm link typescript
+```
+```
+npm install -g webpack
+npm link webpack
+```
+
+All other stuff should be in development dependencies.
 
 ####3) testing:
 
