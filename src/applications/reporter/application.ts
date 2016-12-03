@@ -37,6 +37,8 @@ import {Test} from '../../components/test';
 class Application {
 }
 
-// enableProdMode(); TODO: 1 - make it work with WEBPACK_ENV
+if (Environment.get('production')) {
+    enableProdMode();
+}
 
 platformBrowserDynamic().bootstrapModule(Application);
