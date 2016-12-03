@@ -11,9 +11,9 @@ export class FileProvider {
     private _payload: String = null;
     private _loading: Boolean = false;
 
-    public maxFileSize: Number = 5000000; // should be in bytes
-    public allowedFileTypes: Array<String> = []; // should be ['png', 'jpg'] <= from 'images/png', 'images/jpg': only last part of type
-    public allowedFileExtensions: Array<String> = ['xlsx', 'xls', 'ods']; // should be ['png', 'jpg'] <= from '.png', '.jpg': without dot. Also can contain "without extension".
+    public maxFileSize: Number = Environment.get('fileProvider').maxFileSize; // should be in bytes
+    public allowedFileTypes: Array<String> = Environment.get('fileProvider').allowedFileTypes; // should be ['png', 'jpg'] <= from 'images/png', 'images/jpg': only last part of type
+    public allowedFileExtensions: Array<String> = Environment.get('fileProvider').allowedFileExtensions; // should be ['png', 'jpg'] <= from '.png', '.jpg': without dot. Also can contain "without extension".
 
     constructor(environment: Environment) {
         this.environment = environment;
@@ -83,17 +83,17 @@ export class FileProvider {
         return this._payload;
     }
 
-    putFileIn(file: File) {
+    putFileIn(file: File): Promise<void> {
         if (!this._loading) {
             this._file = file;
             this._payload = null;
-            this._fileValidation(file)
+            return this._fileValidation(file)
                 .then((result: Boolean) => {
                     this._loading = true;
                     this._reader.readAsDataURL(file);
                 })
                 .catch((error: Error) => {
-                    console.error(error.message)
+                    throw error;
                 });
         } else {
             throw new Error('Already busy with loading! Cannot load few files in same time!');

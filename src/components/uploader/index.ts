@@ -4,7 +4,7 @@ import {Environment} from '../../components/environment';
 import {FileProvider} from '../../components/file-provider';
 import {AlertsProvider, Alert} from '../../components/alerts';
 
-class Upload {
+export class Upload {
     file: File;
     payload: String;
 
@@ -38,12 +38,6 @@ export class Uploader {
         this.alertsProvider = alertsProvider;
         this.setAllowedFileTypes(this.fileProvider.allowedFileTypes);
         this.setAllowedFileExtensions(this.fileProvider.allowedFileExtensions);
-        setTimeout(() => {
-            this.alertsProvider.addAlert('uploader', new Alert('danger', 'this is message 1!'));
-            this.alertsProvider.addAlert('uploader', new Alert('info', 'this is message 2!'));
-            this.alertsProvider.addAlert('uploader', new Alert('success', 'this is message 3!'));
-            this.alertsProvider.addAlert('uploader', new Alert('warning', 'this is message 4!'));
-        }, 2000);
     }
 
     get allowedFileTypes(): String {
@@ -81,27 +75,42 @@ export class Uploader {
         let file: File;
         if (files.length > 0) {
             file = files[0];
-            // ---!!!---
+            this._loadFile(file)
+                .then((upload: Upload) => {
+                    if (Environment.get('onSheetFileLoad') && typeof Environment.get('onSheetFileLoad') == 'function') {
+                        Environment.get('onSheetFileLoad')(upload);
+                    } else {
+                        throw new Error('Cannot find onSheetFileLoad function to call! Its should be defined!');
+                    }
+                })
+                .catch((error: Error) => {
+                    this.alertsProvider.addAlert('uploader', new Alert('danger', error.message));
+                });
         }
     }
 
-    private _loadFile(file: File): Promise<String> {
+    private _loadFile(file: File): Promise<Upload> {
         return new Promise((resolve, reject) => {
-            this.fileProvider.putFileIn(file);
-            if (this.upload) {
-                this.upload.destroy();
-            }
-            this.upload = new Upload(file);
-            let checker: number = setInterval(() => {
-                if (!this.fileProvider.isLoading()) {
-                    clearInterval(checker);
-                    this.upload.payload = this.fileProvider.getPayload();
-                    if (!this.upload.payload) {
-                        throw new Error('Error during file loading! Cannot get file content.');
+            this.fileProvider.putFileIn(file)
+                .then(() => {
+                    if (this.upload) {
+                        this.upload.destroy();
                     }
-                    return resolve(this.upload.payload);
-                }
-            }, 100);
+                    this.upload = new Upload(file);
+                    let checker: number = setInterval(() => {
+                        if (!this.fileProvider.isLoading()) {
+                            clearInterval(checker);
+                            this.upload.payload = this.fileProvider.getPayload();
+                            if (!this.upload.payload) {
+                                throw new Error('Error during file loading! Cannot get file content.');
+                            }
+                            return resolve(this.upload);
+                        }
+                    }, 100);
+                })
+                .catch((error: Error) => {
+                    return reject(error);
+                })
         });
     }
 }

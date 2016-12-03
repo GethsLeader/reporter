@@ -17,7 +17,12 @@ const prodEnv = process.env.WEBPACK_ENV;
 const applicationsEnvironment = {
     production: prodEnv === 'production',
     libsDist: 'libs',
-    componentsDist: 'comps'
+    componentsDist: 'comps',
+    fileProvider: {
+        maxFileSize: 5000000,
+        allowedFileTypes: [],
+        allowedFileExtensions: ['xlsx', 'xls', 'ods']
+    }
 };
 
 fs.writeFileSync(path.join(srcPath, 'components', 'environment', 'config.ts'),

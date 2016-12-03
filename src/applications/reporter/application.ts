@@ -5,14 +5,12 @@ import {BrowserModule} from '@angular/platform-browser';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 import {FormsModule}   from '@angular/forms';
 
-// services
+// services and components
 import {Environment} from '../../components/environment';
 import {FileProvider} from '../../components/file-provider';
-
-// components
-import {Reporter} from '../../components/reporter';
 import {Uploader} from '../../components/uploader';
 import {Alerts, AlertsProvider} from '../../components/alerts';
+import {Reporter} from '../../components/reporter';
 import {Test} from '../../components/test';
 
 // application
