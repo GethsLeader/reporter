@@ -1,0 +1,14 @@
+<h1>Uploader</h1>
+<p>{{environment.tick}}</p>
+<alerts [id]="'uploader'">Loading...</alerts>
+<alerts [id]="'xxx'">Loading...</alerts>
+<form>
+    <div class="form-group" [hidden]="!fileProvider.isLoading()">
+        <p>Loading...</p>
+    </div>
+    <div class="form-group" [hidden]="fileProvider.isLoading()">
+        <label>Choose sheet file:</label>
+        <input type="file" id="sheet-file" (change)="sheetFileOnChange($event)">
+        <p class="help-block">Files with {{allowedFileExtensions}} extensions only allowed.</p>
+    </div>
+</form>

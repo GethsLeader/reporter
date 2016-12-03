@@ -87,7 +87,7 @@ export class AlertsProvider {
 
 @Component({
     selector: 'alerts',
-    templateUrl: './comps/alerts/template.html'
+    templateUrl: Environment.getComponentsPath() + 'alerts/template.html'
 })
 export class Alerts {
     environment: Environment;

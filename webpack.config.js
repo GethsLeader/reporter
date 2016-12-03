@@ -1,33 +1,45 @@
 // basic imports
 const webpack = require('webpack');
 const path = require('path');
+const fs = require('fs');
 // plugins
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 // default paths
-const distpath = path.resolve(__dirname, './dist');
-const srcpath = path.resolve(__dirname, './src');
-const libspath = path.resolve(__dirname, './node_modules');
+const distPath = path.resolve(__dirname, './dist');
+const srcPath = path.resolve(__dirname, './src');
+const libsPath = path.resolve(__dirname, './node_modules');
 
-// basic configuration
-const config = {
+// default environment variables
+const prodEnv = process.env.WEBPACK_ENV;
+
+// applications environment configuration
+const applicationsEnvironment = {
+    production: prodEnv === 'production',
+    libsDist: 'libs',
+    componentsDist: 'comps'
+};
+
+fs.writeFileSync(path.join(srcPath, 'components', 'environment', 'config.ts'),
+    '// This file was created on project building phase. Check build configuration for more information.\n'
+    + 'export const config: any = ' + JSON.stringify(applicationsEnvironment) + ';',
+    'utf8');
+
+// basic webpack configuration
+const webpackConfig = {
     entry: {
-        'reporter-application': ['babel-polyfill', path.join(srcpath, 'applications/reporter/application')]
+        'reporter-application': ['babel-polyfill', path.join(srcPath, 'applications', 'reporter', 'application')]
     },
     output: {
-        path: distpath,
+        path: distPath,
         filename: '[name].js'
     },
     resolve: {
-        extensions: ['.ts', '.js', '.json']
+        extensions: ['.ts', '.js']
     },
     module: {
         rules: [
-            {test: /\.ts$/, exclude: /node_modules/, loaders: ['babel-loader', 'ts-loader']},
-            {test: /\.json$/, loader: 'json-loader'},
-            {test: /\.html/, loader: 'html-loader?minimize=true'},
-            {test: /\.css$/, loader: 'css-loader'},
-            {test: /\.(gif|png|jpe?g)$/i, loader: 'file-loader?name=dist/images/[name].[ext]'}
+            {test: /\.ts$/, exclude: /node_modules/, loaders: ['babel-loader', 'ts-loader']}
         ]
     },
     plugins: [
@@ -38,19 +50,18 @@ const config = {
         ),
         new CopyWebpackPlugin(
             [
-                //{context: path.join(srcpath, 'applications'), from: '**/*.html', to: distpath},
-                {
-                    from: path.join(srcpath, 'applications', 'reporter', 'index.html'),
-                    to: path.join(distpath, 'index.html')
+                { // entry point html
+                    from: path.join(srcPath, 'applications', 'reporter', 'index.html'),
+                    to: path.join(distPath, 'index.html')
                 },
-                {
-                    from: path.join(libspath, 'bootstrap', 'dist', 'css', 'bootstrap.min.css'),
-                    to: path.join(distpath, 'libs', 'bootstrap.min.css')
+                { // bootstrap css library
+                    from: path.join(libsPath, 'bootstrap', 'dist', 'css', 'bootstrap.min.css'),
+                    to: path.join(distPath, applicationsEnvironment.libsDist, 'bootstrap.min.css')
                 },
-                {
-                    context: path.join(srcpath, 'components'),
+                { // components html files
+                    context: path.join(srcPath, 'components'),
                     from: path.join('**/*.html'),
-                    to: path.join(distpath, 'comps')
+                    to: path.join(distPath, applicationsEnvironment.componentsDist)
                 }
             ],
             {
@@ -59,8 +70,8 @@ const config = {
     ]
 };
 
-if (process.env.WEBPACK_ENV === 'production') {
-    config.plugins = config.plugins.concat([
+if (prodEnv === 'production') {
+    webpackConfig.plugins = webpackConfig.plugins.concat([
         new webpack.optimize.UglifyJsPlugin({
             compress: {
                 warnings: false
@@ -69,8 +80,8 @@ if (process.env.WEBPACK_ENV === 'production') {
         })
     ]);
 } else {
-    config.devtool = 'source-map';
-    config.plugins = config.plugins.concat([]);
+    webpackConfig.devtool = 'source-map';
+    webpackConfig.plugins = webpackConfig.plugins.concat([]);
 }
 
-module.exports = config;
+module.exports = webpackConfig;

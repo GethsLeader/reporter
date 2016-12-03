@@ -1,9 +1,6 @@
 // angular 2 imports
-import {enableProdMode} from '@angular/core';
-// enableProdMode(); TODO: 1 - make it work with WEBPACK_ENV
-
 import 'zone.js/dist/zone';
-import {NgModule}      from '@angular/core';
+import {NgModule, enableProdMode}      from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 import {FormsModule}   from '@angular/forms';
@@ -11,6 +8,7 @@ import {FormsModule}   from '@angular/forms';
 // services
 import {Environment} from '../../components/environment';
 import {FileProvider} from '../../components/file-provider';
+
 // components
 import {Reporter} from '../../components/reporter';
 import {Uploader} from '../../components/uploader';
@@ -33,11 +31,12 @@ import {Test} from '../../components/test';
     ],
     bootstrap: [
         Reporter,
-        Uploader,
         Test
     ]
 })
 class Application {
 }
+
+// enableProdMode(); TODO: 1 - make it work with WEBPACK_ENV
 
 platformBrowserDynamic().bootstrapModule(Application);

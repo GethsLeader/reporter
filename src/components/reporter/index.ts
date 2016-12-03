@@ -9,9 +9,7 @@ import * as XLSX from 'ts-xlsx';
 
 @Component({
     selector: 'reporter',
-    template: `
-    <h1>Reporter</h1>
-    <p>{{environment.tick}}</p>`
+    templateUrl: Environment.getComponentsPath() + 'reporter/template.html'
 })
 export class Reporter {
     environment: Environment;
